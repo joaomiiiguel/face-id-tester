@@ -1,17 +1,17 @@
 import { useRef, useEffect } from 'react'
 import * as faceapi from 'face-api.js'
+import { useSelector, useDispatch } from 'react-redux'
 
 function ReconhecimentoFacial() {
   const videoRef = useRef()
   const canvasRef = useRef()
+  const isLogged = useSelector((state) => state.user.isLogged)
 
   // LOAD FROM USEEFFECT
   useEffect(() => {
-    startVideo()
-    videoRef && loadModels()
-
+      startVideo()
+      videoRef && loadModels()
   }, [])
-
 
 
   // OPEN YOU FACE WEBCAM
@@ -59,8 +59,8 @@ function ReconhecimentoFacial() {
   }
 
   return (
-    <div className='flex flex-col w-full items-center justify-between'>
-      <div className="flex items-center">
+    <div className='flex flex-col w-full items-center justify-between h-[400px]'>
+      <div className="flex items-center ">
         <video crossOrigin="anonymous" ref={videoRef} autoPlay></video>
       </div>
       <canvas ref={canvasRef} width="400" height="400"  className="absolute" />
