@@ -55,11 +55,12 @@ function ReconhecimentoFacial() {
       const labeledDescriptors = [
         new faceapi.LabeledFaceDescriptors(
           'Miguel',
-          [resultRef.descriptor]
+          [resultRef?.descriptor]
         )
       ]
-      const faceMatcher = new faceapi.FaceMatcher(labeledDescriptors)
+      
 
+      const faceMatcher = await new faceapi.FaceMatcher(labeledDescriptors)
 
       const displayResized = {
         width: 350,
@@ -70,19 +71,22 @@ function ReconhecimentoFacial() {
       canvasRef.current.innerHtml = faceapi.createCanvasFromMedia(videoRef.current)
       faceapi.matchDimensions(canvasRef.current, displayResized)
 
-      const resized = faceapi.resizeResults(resultRef, displayResized)
+      const bestMatch = await faceMatcher.findBestMatch(queryRef?.descriptor)
 
-      faceapi.draw.drawDetections(canvasRef.current, resized)
-    }, 2000)
+      const box = { x: (queryRef.detection.box.x / 2), y: (queryRef.detection.box.y / 2), width: 100, height: 100 }
+      const queryDrawBoxes = new faceapi.draw.DrawBox(box, { label: bestMatch.label })
+      queryDrawBoxes.draw(canvasRef.current)
+
+    }, 1000)
   }
 
   return (
     <div className='flex flex-row w-full h-full'>
-      <Image ref={imageRef} src={imgUser} alt="" width="100" height="100" className='h-fit absolute'/>
+      <Image ref={imageRef} src={imgUser} alt="" width="100" height="100" className='h-fit absolute' />
       <div className="flex items-center w-full">
         <video crossOrigin="anonymous" ref={videoRef} autoPlay></video>
       </div>
-      <canvas ref={canvasRef} className="absolute" width="350" height="230" />
+      <canvas ref={canvasRef} className="absolute" />
     </div>
   )
 
