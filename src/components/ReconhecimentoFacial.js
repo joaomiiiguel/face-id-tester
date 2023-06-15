@@ -1,7 +1,7 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import * as faceapi from 'face-api.js'
 
-function ReconhecimentoFacial() {
+function ReconhecimentoFacial({ setUserRecon, stopVideo}) {
   const imageRef = useRef()
   const videoRef = useRef()
   const canvasRef = useRef()
@@ -43,7 +43,7 @@ function ReconhecimentoFacial() {
 
 
   function loadLabeledImages() {
-    const labels = ['miguel', 'vando']
+    const labels = ['miguel', 'vando', 'tibor']
     return Promise.all(
       labels.map(async label => {
         const descriptions = []
@@ -80,7 +80,7 @@ function ReconhecimentoFacial() {
       faceapi.matchDimensions(canvasRef.current, displayResized)
 
       const bestMatch = await faceMatcher.findBestMatch(queryRef?.descriptor)
-
+      setUserRecon(bestMatch._label)
       const box = { x: (queryRef.detection.box.x / 1.7), y: (queryRef.detection.box.y / 2), width: 100, height: 100 }
       const queryDrawBoxes = new faceapi.draw.DrawBox(box, { label: bestMatch.label })
       queryDrawBoxes.draw(canvasRef.current)

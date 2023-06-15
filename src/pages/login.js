@@ -13,12 +13,16 @@ import { useRouter } from 'next/router';
 
 export default function Login() {
     const [loading, setLoading] = useState(false)
-    const [name, setName] = useState('Miguel')
+    const [name, setName] = useState('unknown')
     const router = useRouter()
     const dispatch = useDispatch()
 
 
     function handleLogin() {
+        if(name === 'unknown'){
+            alert('Utilisateur non identifié!')
+            return
+        }
         setLoading(true)
         setTimeout(() => {
             if (name === '' || name === null) {
@@ -47,7 +51,7 @@ export default function Login() {
                     <p className='text-xs uppercase'>Connectez-vous par reconnaissance faciale</p>
                 </div>
                 <div className='rounded-lg overflow-hidden'>
-                    <ReconhecimentoFacial />
+                    <ReconhecimentoFacial setUserRecon={setName}/>
                 </div>
                 <div className='flex flex-col justify-between w-full mt-6'>
                     {loading ?
