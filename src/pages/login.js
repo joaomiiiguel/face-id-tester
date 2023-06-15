@@ -46,7 +46,7 @@ export default function Login() {
                     <p className='text-xl font-bold uppercase'>Cette page est protégée</p>
                     <p className='text-xs uppercase'>Connectez-vous par reconnaissance faciale</p>
                 </div>
-                <div className='rounded-lg overflow-hidden '>
+                <div className='rounded-lg overflow-hidden'>
                     <ReconhecimentoFacial />
                 </div>
                 <div className='flex flex-col justify-between w-full mt-6'>

@@ -1,15 +1,10 @@
 import { useRef, useEffect } from 'react'
 import * as faceapi from 'face-api.js'
-import Image from 'next/image'
-
-import imgUser from '../../public/miguel1.jpeg'
 
 function ReconhecimentoFacial() {
   const imageRef = useRef()
   const videoRef = useRef()
   const canvasRef = useRef()
-  // const isLogged = useSelector((state) => state.user.isLogged)
-  const labels = ['sheldon', 'raj', 'leonard', 'howard']
 
   // LOAD FROM USEEFFECT
   useEffect(() => {
@@ -45,6 +40,23 @@ function ReconhecimentoFacial() {
       .catch((e) => console.log(e))
   }
 
+
+  function loadLabeledImages() {
+    const labels = ['miguel', 'vando']
+    return Promise.all(
+      labels.map(async label => {
+        const descriptions = []
+        for (let i = 1; i <= 2; i++) {
+          const img = await faceapi.fetchImage(`https://github.com/joaomiiiguel/face-id-tester/tree/4153421d02131104434984b573f813a88bd3ccad/public/images/${label}.jpeg`)
+          const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
+          descriptions.push(detections.descriptor)
+        }
+
+        return new faceapi.LabeledFaceDescriptors(label, descriptions)
+      })
+    )
+  }
+
   const faceMyDetect = async () => {
     setInterval(async () => {
       //image cadastrada
@@ -52,15 +64,10 @@ function ReconhecimentoFacial() {
       //Webcan de rec
       const queryRef = await faceapi.detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions().withFaceDescriptor()
 
-      const labeledDescriptors = [
-        new faceapi.LabeledFaceDescriptors(
-          'Miguel',
-          [resultRef?.descriptor]
-        )
-      ]
-      
+      const labeledFaceDescriptors = await loadLabeledImages()
 
-      const faceMatcher = await new faceapi.FaceMatcher(labeledDescriptors)
+
+      const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.5)
 
       const displayResized = {
         width: 350,
@@ -73,16 +80,15 @@ function ReconhecimentoFacial() {
 
       const bestMatch = await faceMatcher.findBestMatch(queryRef?.descriptor)
 
-      const box = { x: (queryRef.detection.box.x / 2), y: (queryRef.detection.box.y / 2), width: 100, height: 100 }
+      const box = { x: (queryRef.detection.box.x / 1.7), y: (queryRef.detection.box.y / 2), width: 100, height: 100 }
       const queryDrawBoxes = new faceapi.draw.DrawBox(box, { label: bestMatch.label })
       queryDrawBoxes.draw(canvasRef.current)
 
-    }, 1000)
+    }, 2000)
   }
 
   return (
     <div className='flex flex-row w-full h-full'>
-      <Image ref={imageRef} src={imgUser} alt="" width="100" height="100" className='h-fit absolute' />
       <div className="flex items-center w-full">
         <video crossOrigin="anonymous" ref={videoRef} autoPlay></video>
       </div>
