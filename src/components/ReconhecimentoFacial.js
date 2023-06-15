@@ -31,7 +31,8 @@ function ReconhecimentoFacial() {
       faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
       faceapi.nets.faceExpressionNet.loadFromUri("/models"),
       faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
-      faceapi.nets.faceLandmark68Net.loadFromUri("/models")
+      faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
+      faceapi.nets.ssdMobilenetv1.loadFromUri("/models")
 
     ]).then(() => {
       console.log('Done Load');
@@ -47,7 +48,7 @@ function ReconhecimentoFacial() {
       labels.map(async label => {
         const descriptions = []
         for (let i = 1; i <= 2; i++) {
-          const img = await faceapi.fetchImage(`https://github.com/joaomiiiguel/face-id-tester/tree/4153421d02131104434984b573f813a88bd3ccad/public/images/${label}.jpeg`)
+          const img = await faceapi.fetchImage(`https://raw.githubusercontent.com/joaomiiiguel/face-id-tester/main/public/images/${label}.jpeg`)
           const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
           descriptions.push(detections.descriptor)
         }
