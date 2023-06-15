@@ -46,10 +46,10 @@ export default function Login() {
                     <p className='text-xl font-bold uppercase'>Cette page est protégée</p>
                     <p className='text-xs uppercase'>Connectez-vous par reconnaissance faciale</p>
                 </div>
-                <div className='rounded-lg overflow-hidden mb-6 h-[400px]'>
+                <div className='rounded-lg overflow-hidden '>
                     <ReconhecimentoFacial />
                 </div>
-                <div className='flex flex-col justify-between w-full'>
+                <div className='flex flex-col justify-between w-full mt-6'>
                     {loading ?
                         <button disabled className='w-full flex justify-center p-2 px-8 opacity-70 rounded bg-gradient-to-b from-[#B48D41] to-[#755A27]'>
                             <SpinnerGap size={26} className="animate-spin" />
