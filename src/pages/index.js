@@ -21,8 +21,6 @@ const Guard = ({ user }) => {
     }
   }, [user])
 
-  console.log(user);
-
   return (
     <Painel/>
   )

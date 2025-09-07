@@ -13,13 +13,13 @@ import { useRouter } from 'next/router';
 
 export default function Login() {
     const [loading, setLoading] = useState(false)
-    const [name, setName] = useState('unknown')
+    const [name, setName] = useState('nenhum_rosto_detectado')
     const router = useRouter()
     const dispatch = useDispatch()
 
 
     function handleLogin() {
-        if(name === 'unknown'){
+        if(name === 'nenhum_rosto_detectado'){
             alert('Utilisateur non identifié!')
             return
         }
