@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { SpinnerGap } from "@phosphor-icons/react";
 import { useSelector, useDispatch } from 'react-redux'
 import { logginUser } from '@/redux/userSlice';
+import toast from 'react-hot-toast';
 
 import ReconhecimentoFacial from '@/components/ReconhecimentoFacial'
 
@@ -19,8 +20,8 @@ export default function Login() {
 
 
     function handleLogin() {
-        if(name === 'nenhum_rosto_detectado'){
-            alert('Utilisateur non identifié!')
+        if (name === 'nenhum_rosto_detectado' || name === 'desconhecido') {
+            toast.error('Utilisateur non identifié!');
             return
         }
         setLoading(true)
@@ -31,6 +32,7 @@ export default function Login() {
             }
             dispatch(logginUser(name))
             localStorage.setItem('userFaceISF', name);
+            toast.success('Connexion réussie')
             router.push('/painel')
             setLoading(false)
         }, 1500);
@@ -44,14 +46,14 @@ export default function Login() {
             <Image src={Image1} alt="" className='fixed h-screen w-auto left-0 mix-blend-lighten blur-[3px]' />
             <Image src={Image2} alt="" className='fixed h-screen w-auto right-0 mix-blend-lighten blur-[3px]' />
 
-            <div className='flex h-[85vh] max-h-[600px] max-w-lg flex-col items-center shadow-lg bg-black justify-between rounded-xl overflow-hidden px-20 py-10 relative text-center'>
+            <div className='flex h-[85vh] max-h-[600px] max-w-lg flex-col items-center shadow-lg bg-black text-white justify-between rounded-xl overflow-hidden px-20 py-10 relative text-center'>
                 <Image src={LogoIFS} alt="Logo of IFS" className='h-[10vh] w-auto' />
                 <div className='my-6'>
                     <p className='text-xl font-bold uppercase'>Cette page est protégée</p>
                     <p className='text-xs uppercase'>Connectez-vous par reconnaissance faciale</p>
                 </div>
                 <div className='rounded-lg overflow-hidden'>
-                    <ReconhecimentoFacial setUserRecon={setName}/>
+                    <ReconhecimentoFacial setUserRecon={setName} />
                 </div>
                 <div className='flex flex-col justify-between w-full mt-6'>
                     {loading ?

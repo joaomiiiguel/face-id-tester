@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-
 import { useSelector, useDispatch } from 'react-redux'
 import { logginUser } from '@/redux/userSlice';
 import { useRouter } from 'next/router';
+
 import Painel from './painel';
 
 const Guard = ({ user }) => {
@@ -22,7 +22,7 @@ const Guard = ({ user }) => {
   }, [user])
 
   return (
-    <Painel/>
+    <Painel />
   )
 }
 
@@ -30,6 +30,6 @@ export default function Home() {
   const userName = useSelector((state) => state.user.name)
 
   return (
-    <Guard user={userName} />
+      <Guard user={userName} />
   )
 }
